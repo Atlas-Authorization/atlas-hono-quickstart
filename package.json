@@ -1,0 +1,16 @@
+{
+  "name": "atlas-hono-quickstart",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Hono API protected by Atlas auth (@atlasauth/hono).",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "@atlasauth/hono": "^0.1.0",
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.6.14"
+  }
+}
