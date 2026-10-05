@@ -5,7 +5,7 @@ auth, running on `@hono/node-server`.
 
 ## What's wired
 
-- **`src/server.js`** — `atlasMiddleware()` from `@atlasauth/hono` verifies the
+- **`src/server.ts`** — `atlasMiddleware()` from `@atlasauth/hono` verifies the
   session JWT **locally** against the instance JWKS and stores the auth object on
   the context.
   - `GET /api/me` reads `getAuth(c)` — public.
@@ -17,7 +17,8 @@ auth, running on `@hono/node-server`.
 ```sh
 npm install
 cp .env.example .env
-node --env-file=.env --watch src/server.js
+npm run dev   # tsx watch --env-file=.env src/server.ts
+npm run typecheck   # tsc --noEmit  (npm run build -> dist/)
 ```
 
 ```sh

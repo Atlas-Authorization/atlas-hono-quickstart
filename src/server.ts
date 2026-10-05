@@ -5,7 +5,7 @@
 // downstream with `getAuth(c)`. No Atlas endpoint is called per request.
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
-import { atlasMiddleware, getAuth } from '@atlasauth/hono';
+import { atlasMiddleware, getAuth, type AtlasAuth } from '@atlasauth/hono';
 
 const { ATLAS_JWKS_URL, ATLAS_ISSUER, ATLAS_PUBLISHABLE_KEY, PORT = '3000' } = process.env;
 
@@ -27,13 +27,15 @@ app.use(
 
 // Public — reports who you are, if anyone.
 app.get('/api/me', (c) => {
-  const { userId, sessionId, orgId, orgRole, isSignedIn } = getAuth(c);
+  const { userId, sessionId, orgId, orgRole } = getAuth(c);
+  // The auth object has no `isSignedIn` field; derive it from `userId`.
+  const isSignedIn = userId !== null;
   return c.json({ isSignedIn, userId, sessionId, orgId, orgRole });
 });
 
 // Protected — gate inline off the verified auth object.
 app.get('/api/protected', (c) => {
-  const auth = getAuth(c);
+  const auth: AtlasAuth = getAuth(c);
   if (!auth.userId) return c.json({ errors: [{ code: 'UNAUTHENTICATED' }] }, 401);
   return c.json({ message: `Hello, ${auth.userId}.`, isAdmin: auth.has({ role: 'admin' }) });
 });
